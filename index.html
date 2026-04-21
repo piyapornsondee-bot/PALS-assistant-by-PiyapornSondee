@@ -44,9 +44,21 @@
 
         h1 {
             font-weight: 600;
-            letter-spacing: 10px;
-            color: var(--pastel-blue);
+            letter-spacing: 2px;
+            background: linear-gradient(to right, var(--pastel-blue), #ffffff, var(--pastel-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(162, 210, 255, 0.3));
+            font-size: 2.8rem;
+            text-transform: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+                letter-spacing: 1px;
+            }
         }
 
         .input-wrapper {
@@ -164,15 +176,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding-top: 20px;
         }
 
         /* สไตล์โมเดลการ์ตูนเด็กนอน (Image Based) */
         .cartoon-patient {
-            width: 180px;
+            width: 160px;
             height: auto;
             border-radius: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            margin-top: -10px;
             filter: drop-shadow(0 0 20px rgba(162, 210, 255, 0.3));
             animation: pulse-glow 3s infinite alternate;
         }
@@ -454,6 +468,69 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        /* Nav Buttons (Home & Theme) */
+        .nav-container {
+            position: absolute;
+            top: 20px;
+            width: 95%;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-family: inherit;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .back-calc-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--pastel-yellow);
+            border: 1px solid var(--pastel-yellow);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+            display: none;
+        }
+
+        .back-calc-btn.active {
+            display: inline-block;
+        }
+
+        .back-calc-btn:hover {
+            background: var(--pastel-yellow);
+            color: #1e293b;
+            box-shadow: 0 4px 15px rgba(253, 250, 102, 0.3);
+        }
+
+        body.light-mode .nav-btn {
+            background: rgba(0, 0, 0, 0.05);
+            color: #0f172a;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
         body.light-mode {
             --bg: #f1f5f9;
             background: radial-gradient(circle at top, #ffffff, var(--bg));
@@ -522,6 +599,16 @@
             color: white !important;
         }
 
+        body.light-mode .back-calc-btn {
+            border-color: #ca8a04;
+            color: #ca8a04;
+        }
+
+        body.light-mode .back-calc-btn:hover {
+            background: #ca8a04;
+            color: white;
+        }
+
         /* Medication Guide Card */
         .med-buttons {
             display: grid;
@@ -550,6 +637,155 @@
             background: rgba(255, 255, 255, 0.1);
             border-color: var(--pastel-blue);
             box-shadow: 0 4px 10px rgba(162, 210, 255, 0.2);
+        }
+
+        /* Medication Grid */
+        .med-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .med-btn-sm {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 5px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .med-btn-sm:hover {
+            background: rgba(162, 210, 255, 0.1);
+            border-color: var(--pastel-blue);
+            color: white;
+        }
+
+        /* Dual Units */
+        .val-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .val-sub {
+            font-size: 0.85rem;
+            color: var(--pastel-blue);
+            font-weight: 400;
+            margin-top: -3px;
+        }
+
+        /* Glassmorphism Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            color: var(--pastel-pink);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .modal-body p {
+            margin: 10px 0;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        .modal-body strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .modal-calc-box {
+            background: rgba(255, 175, 204, 0.08);
+            border: 1px dashed var(--pastel-pink);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .modal-calc-val {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--pastel-pink);
+        }
+
+        .close-btn {
+            background: var(--pastel-blue);
+            color: #0b0e14;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 20px auto 0;
+            display: block;
+            width: fit-content;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(162, 210, 255, 0.4);
+        }
+
+        body.light-mode .med-btn-sm {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+
+        body.light-mode .modal-content {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .modal-body p {
+            color: #475569;
+        }
+
+        body.light-mode .modal-body strong {
+            color: #0f172a;
         }
 
         .med-detail {
@@ -600,10 +836,13 @@
 </head>
 
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ Light</button>
+    <div class="nav-container">
+        <button class="nav-btn" onclick="resetAll()">🏠 หน้าหลัก</button>
+        <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light</button>
+    </div>
 
     <div class="header" id="header">
-        <h1>PALS.</h1>
+        <h1>PALS-Assistant EMS CMU</h1>
         <div class="input-wrapper">
             อายุ <input type="number" id="age" placeholder="0"> |
             น้ำหนัก <input type="number" id="weight" placeholder="0"> kg
@@ -653,14 +892,48 @@
 
             <div class="card ord-2" style="border-left: 4px solid var(--pastel-pink);">
                 <h3>🚨 Cardiac Arrest</h3>
-                <div class="row"><span class="lbl">Epi (1:10,000)</span><span><span class="val pink"
-                            id="m_epi">-</span><span class="unit">mL</span></span></div>
-                <div class="row"><span class="lbl">Amiodarone</span><span><span class="val" id="m_amio">-</span><span
-                            class="unit">mg</span></span></div>
-                <div class="row"><span class="lbl">Lidocaine (Bolus)</span><span><span class="val"
-                            id="m_lido">-</span><span class="unit">mg</span></span></div>
-                <div class="row"><span class="lbl">Atropine (Brady)</span><span><span class="val"
-                            id="m_atro">-</span><span class="unit">mg</span></span></div>
+                <div class="row">
+                    <span class="lbl">Epinephrine (0.01 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val pink" id="m_epi_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_epi_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Amiodarone (5 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_amio_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_amio_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Lidocaine (1 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_lido_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_lido_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Atropine (0.02 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_atro_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_atro_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Adenosine 1st (0.1 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_ade1_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_ade1_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Adenosine 2nd (0.2 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_ade2_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_ade2_ml">- mL</span>
+                    </div>
+                </div>
                 <!-- Metronome สำหรับ CPR -->
                 <div class="metronome-container">
                     <button id="metroBtn" onclick="toggleMetronome()">เริ่มจังหวะการกด (110 bpm)</button>
@@ -687,185 +960,228 @@
             <img src="cartoon_child.png" class="cartoon-patient" alt="Cartoon Patient">
 
             <div class="wt-tag" id="display_wt">0 kg</div>
+            <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 15px;">Dose ยาใช้ AW | Fluid/Crystalloid ใช้
+                IBW</div>
 
             <div class="card" style="width: 90%; margin-top: 20px; border-bottom: 4px solid var(--pastel-green);">
                 <h3>🍬 Metabolic / Glucose</h3>
-                <div class="row"><span class="lbl">D10W (5-10 mL/kg)</span><span><span class="val green"
-                            id="m_d10">-</span><span class="unit">mL</span></span></div>
-                <div class="row"><span class="lbl">Ca Gluconate</span><span><span class="val" id="m_ca">-</span><span
-                            class="unit">mL</span></span></div>
-                <div class="row"><span class="lbl">MgSO4 50% (Torsades)</span><span><span class="val"
-                            id="m_mg">-</span><span class="unit">mL</span></span></div>
+                <div class="row">
+                    <span class="lbl">Glucose 50% (0.5 g/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val green" id="m_glu_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_glu_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Ca Gluconate (60 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_ca_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_ca_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">MgSO4 50% (25 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_mg_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_mg_ml">- mL</span>
+                    </div>
+                </div>
+            </div>
+            <button class="back-calc-btn" id="backBtn" onclick="goBack()">🔄 กลับไปหน้าคำนวณ (Back)</button>
+
+            <div class="card" style="width: 90%; margin-top: 20px; border-bottom: 4px solid var(--pastel-yellow);">
+                <h3>📊 Normal Vital Signs สำหรับเด็กคนนี้</h3>
+                <div class="row">
+                    <span class="lbl">Respiratory Rate (RR)</span>
+                    <span class="val" style="color:var(--pastel-yellow);" id="vs_rr">-</span>
+                </div>
+                <div class="row">
+                    <span class="lbl">Heart Rate (HR)</span>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.85rem; color: var(--pastel-yellow);" id="vs_hr_awake">- (ขณะตื่น)</div>
+                        <div style="font-size: 0.85rem; color: #94a3b8;" id="vs_hr_sleep">- (ขณะหลับ)</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl" id="vs_bp_label">Hypotension (Systolic)</span>
+                    <span class="val" style="color:var(--pastel-pink);" id="vs_bp">-</span>
+                </div>
             </div>
         </div>
 
         <div class="col-side" style="display:flex; flex-direction:column; gap:20px;">
             <div class="card ord-5" style="border-left: 4px solid var(--pastel-purple);">
                 <h3>🧠 Neuro / Tox</h3>
-                <div class="row"><span class="lbl">Diazepam</span><span class="val purple" id="m_dia">-</span></div>
-                <div class="row"><span class="lbl">Lorazepam</span><span class="val purple" id="m_lor">-</span></div>
-                <div class="row"><span class="lbl">Naloxone</span><span class="val yellow" id="m_nal">-</span></div>
-                <div class="row"><span class="lbl">Midazolam</span><span class="val" id="m_mid">-</span></div>
+                <div class="row">
+                    <span class="lbl">Diazepam (0.2 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val purple" id="m_dia_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_dia_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Lorazepam (0.1 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val purple" id="m_lor_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_lor_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Naloxone (0.1 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val yellow" id="m_nal_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_nal_ml">- mL</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="lbl">Midazolam (0.1 mg/kg)</span>
+                    <div class="val-group">
+                        <span><span class="val" id="m_mid_mg">-</span><span class="unit">mg</span></span>
+                        <span class="val-sub" id="m_mid_ml">- mL</span>
+                    </div>
+                </div>
             </div>
 
             <div class="card ord-3" style="border-left: 4px solid var(--pastel-blue);">
                 <h3>⚡ Others / Fluids</h3>
-                <div class="row"><span class="lbl">NS Bolus (20 mL/kg)</span><span><span class="val blue"
+                <div class="row"><span class="lbl">NS/RLS (20 mL/kg)</span><span><span class="val blue"
                             id="m_ns">-</span><span class="unit">mL</span></span></div>
-                <div class="row"><span class="lbl">Adenosine (1st)</span><span><span class="val"
-                            id="m_ade">-</span><span class="unit">mg</span></span></div>
+                <p style="font-size: 0.7rem; color: #94a3b8; margin: -5px 0 10px 0;">*Cardiogenic shock: 5-10 mL/kg</p>
                 <div class="row"><span class="lbl">Defib (2 J/kg)</span><span><span class="val blue"
                             id="df1">-</span><span class="unit">J</span></span></div>
                 <div class="row"><span class="lbl">Defib (4 J/kg)</span><span><span class="val blue"
                             id="df2">-</span><span class="unit">J</span></span></div>
+                <div class="row"><span class="lbl">Defib (3rd+) 4-10 J/kg</span><span><span class="val blue"
+                            id="df3">-</span><span class="unit">J</span></span></div>
             </div>
 
             <!-- Medication Detail Card -->
             <div class="card ord-6" style="border-left: 4px solid var(--pastel-pink);">
-                <h3>💊 คู่มือการบริหารยา (Drug Admin)</h3>
-                <div class="med-buttons">
-                    <!-- Epinephrine -->
-                    <button class="med-btn" onclick="showMed(
-                        'Epinephrine', 
-                        '0.01 mg/kg', 
-                        'IV / IO (Rapid Bolus)', 
-                        'ผสม 1:10,000 (นำ 1:1,000 1mL + NSS 9mL ให้ได้ 10mL)', 
-                        'ให้ทุก 3-5 นาที ระหว่างทำ CPR / Flush NSS ตามทันที'
-                    )">Epinephrine</button>
-
-                    <!-- Amiodarone -->
-                    <button class="med-btn" onclick="showMed(
-                        'Amiodarone', 
-                        '5 mg/kg', 
-                        'IV / IO (Rapid Bolus) สำหรับ VF/pVT', 
-                        'ผสมด่วนใน D5W 20-30 mL (ห้ามผสม NSS)', 
-                        'ใช้สำหรับ VF/pVT ที่ดื้อต่อการ Shock / Flush NSS ตามทันที'
-                    )">Amiodarone</button>
-
-                    <!-- Lidocaine -->
-                    <button class="med-btn" onclick="showMed(
-                        'Lidocaine', 
-                        '1 mg/kg', 
-                        'IV / IO / ET (สำหรับ VF/pVT)', 
-                        'ไม่ต้องผสมเพิ่ม (Undiluted ใช้ 1% หรือ 2%)', 
-                        'ใช้แทน Amiodarone ได้ / Flush NSS ตามเพื่อให้ยาเข้าหัวใจ'
-                    )">Lidocaine</button>
-
-                    <!-- Adenosine -->
-                    <button class="med-btn" onclick="showMed(
-                        'Adenosine', 
-                        'Initial 0.1 mg/kg (Max 6mg)', 
-                        'IV / IO (Rapid Push เส้นเลือดใกล้หัวใจ)', 
-                        'ห้ามเจือจาง (Undiluted)', 
-                        'ใช้สำหรับ SVT / ต้อง Flush NSS ตามทันทีอย่างรวดเร็ว'
-                    )">Adenosine</button>
-
-                    <!-- Atropine -->
-                    <button class="med-btn" onclick="showMed(
-                        'Atropine', 
-                        '0.02 mg/kg (ขั้นต่ำ 0.1mg)', 
-                        'IV / IO (Bolus)', 
-                        'ไม่ต้องผสมเพิ่ม (Undiluted จาก Ampule/Syringe)', 
-                        'ใช้สำหรับ Bradycardia / Flush NSS ตาม'
-                    )">Atropine</button>
-
-                    <!-- Diazepam -->
-                    <button class="med-btn" onclick="showMed(
-                        'Diazepam', 
-                        'Bolus / Rectal', 
-                        'IV ช้าๆ / Rectal', 
-                        'ไม่ต้องผสม (Undiluted)', 
-                        'ห้ามผสมยาสายเดียวกัน (ตกตะกอนง่ายมาก)'
-                    )">Diazepam</button>
-
-                    <!-- Lorazepam -->
-                    <button class="med-btn" onclick="showMed(
-                        'Lorazepam', 
-                        'Bolus', 
-                        'IV ช้าๆ (ไม่เกิน 2 mg/min)', 
-                        'เจือจาง 1:1 ด้วย NSS หรือ D5W (ลดความหนืด)', 
-                        'ระวังการกดการหายใจ'
-                    )">Lorazepam</button>
-
-                    <!-- Midazolam -->
-                    <button class="med-btn" onclick="showMed(
-                        'Midazolam', 
-                        'Bolus / Drip / IN / IM', 
-                        'IV / IO / IN / IM', 
-                        'ไม่ต้องผสม หรือเจือจางด้วย NSS/D5W (Drip มักผสมใน 50mL)', 
-                        'IN/IM ใช้ได้กรณีฉุกเฉินที่ยังไม่มีเส้นเลือด'
-                    )">Midazolam</button>
-
-                    <!-- Naloxone -->
-                    <button class="med-btn" onclick="showMed(
-                        'Naloxone', 
-                        'Bolus / Drip', 
-                        'IV / IO / IM / SQ / ET', 
-                        'ไม่ต้องผสม (สำหรับ Bolus) หรือ ผสม NSS/D5W (สำหรับ Drip)', 
-                        'ยาแก้พิษกลุ่ม Opioid (ฝิ่น/มอร์ฟีน)'
-                    )">Naloxone</button>
-                </div>
-
-                <div id="medDetail" class="med-detail" style="display: none;">
-                    <h4 id="medName"
-                        style="font-size: 1.2rem; color: var(--pastel-pink); margin-top: 0; border-bottom: 2px dashed rgba(255,175,204, 0.4); padding-bottom: 8px; margin-bottom: 12px;">
-                        ชื่อยา</h4>
-                    <p><strong>📍 ช่องทาง (Route):</strong> <span id="medRoute">--</span></p>
-                    <p><strong>🧪 การผสม (Prep):</strong> <span id="medPrep">--</span></p>
-                    <p><strong>⚖️ ขนาด (Dose):</strong> <span id="medDose">--</span></p>
-                    <p><strong>📝 หมายเหตุ:</strong> <span id="medNote">--</span></p>
-                    <button onclick="closeMed()"
-                        style="width: 100%; margin-top: 15px; margin-left: 0; background-color: var(--pastel-pink); color: #1e293b; border: none; font-size: 1rem; border-radius: 12px;">ปิดหน้าต่างข้อมูล</button>
+                <h3>💊 รายการยาเพิ่มเติม (Drug Admin)</h3>
+                <div class="med-grid" id="medGrid">
+                    <!-- Buttons generated by JS -->
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Popup ข้อมูลยา (Detailed Modal) -->
+    <div id="medModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="displayMedName">ชื่อยา</div>
+            <div class="modal-body">
+                <p><strong>📍 ช่องทาง (Route):</strong> <span id="displayRoute">--</span></p>
+                <div class="modal-calc-box">
+                    <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px;">ขนาดที่ต้องใช้ (Calculated Dose)
+                    </div>
+                    <div class="modal-calc-val" id="displayCalc">--</div>
+                </div>
+                <p><strong>🧪 การเตรียม (Prep):</strong> <span id="displayPrep">--</span></p>
+                <p><strong>⚠️ หมายเหตุ:</strong> <span id="displayNote">--</span></p>
+            </div>
+            <button class="close-btn" onclick="closeModal()">ปิดหน้าต่าง (Close)</button>
+        </div>
+    </div>
+    </div>
+    </div>
+
     <script>
+        // 1. Database ยา
+        const medDB = {
+            'Adrenaline (Epinephrine)': {
+                conc: 1, dose: 0.01, max: 1, route: 'IV/IO/IM/ET/Neb',
+                prep: 'CPR: 1:10,000 (0.1 ml/kg), IM: 1:1,000 (0.01 ml/kg), Croup: 1:1,000 (0.5 ml/kg Neb)',
+                note: 'Cardiac Arrest: 0.01 mg/kg (Max 1mg); ETT: 0.1 mg/kg. Hypotension: 0.1-1 mcg/kg/min. Anaphylaxis: 0.01 mg/kg (0.01 ml/kg) IM (Max 0.3ml) q 5-15 min. Croup: 0.5 ml/kg Neb (+NSS 2ml); Max 2.5ml (<4yr), 5ml (>4yr)'
+            },
+            'Adenosine (1st)': { conc: 3, dose: 0.1, max: 6, route: 'Rapid IV Push', prep: '6mg/2ml (ห้ามผสมน้ำ)', note: '1st: 0.1 mg/kg (max 6mg). 2 syringes technique (5-10 mL). ลดขนาดยาหากมี HF, transplant, หรือได้ยา CBZ/dipyridamole. กรณี severe TR, Glenn, Fontan, หรือ large atrial Lt-to-Rt shunt อาจเปลี่ยนเป็น amiodarone หรือ synchronized cardioversion' },
+            'Adenosine (2nd)': { conc: 3, dose: 0.2, max: 12, route: 'Rapid IV Push', prep: '6mg/2ml (ห้ามผสมน้ำ)', note: '2nd: 0.2 mg/kg (max 12mg). 2 syringes technique (5-10 mL). ลดขนาดยาหากมี HF, transplant, หรือได้ยา CBZ/dipyridamole. กรณี severe TR, Glenn, Fontan, หรือ large atrial Lt-to-Rt shunt อาจเปลี่ยนเป็น amiodarone หรือ synchronized cardioversion' },
+            'Amiodarone': { conc: 50, dose: 5, max: 300, route: 'IV/IO Bolus', prep: '150mg/3ml (ผสม D5W up to 20-30 ml)', note: 'VF/pVT: bolus; SVT/VT: 20-60 min. ให้ซ้ำได้ 3 ครั้ง (รวม 15 mg/kg) max 300 mg/dose' },
+            'Atropine': { conc: 0.6, dose: 0.02, max: 0.5, route: 'IV/IO', prep: 'ไม่ต้องเจือจาง (Min 0.1mg)', note: 'IV: 0.02 mg/kg (max 0.5mg); ETT: 0.04-0.06 mg/kg. ใช้ใน unstable bradycardia (vagal, Mobitz I/II) หรือ high dose ใน organophosphate poisoning' },
+            'Calcium gluconate 10%': { conc: 100, dose: 60, max: 1000, route: 'IV/IO (Slow Push)', prep: '10ml = 1,000mg', note: '0.6 mL/kg IV slow push (Max 10 mL หรือ 1,000 mg)' },
+            'Chlorpheniramine (CPM)': { conc: 10, dose: 0.25, max: 5, route: 'IV/IM/SC', prep: '10mg/1ml', note: '0.25 mg/kg ทุก 6 ชม. (Max 5 mg/dose)' },
+            'Dexamethasone': { conc: 5, dose: 0.6, route: 'IV/IM/PO', prep: '5mg/1ml', note: '0.6 mg/kg (asthma, croup)' },
+            'Diazepam': { conc: 5, dose: 0.2, max: 10, route: 'IV Slow Push', prep: '10mg/2ml (ห้ามผสมน้ำยาอื่น)', note: '0.2-0.3 mg/kg (0.04-0.06 ml/kg); สูงสุด 10 mg (2 ml)' },
+            'Dimenhydrinate': { conc: 50, dose: 1.25, route: 'IV/IM', prep: '50mg/1ml', note: '1.25 mg/kg (Antiemetic)' },
+            'Dopamine': { conc: 40, dose: 5, route: 'IV Drip', prep: '250mg/5ml (ผสมใน NSS/D5W)', note: '2-20 mcg/kg/min' },
+            'Dobutamine': { conc: 12.5, dose: 5, route: 'IV Drip', prep: '250mg/20ml (ผสมใน NSS/D5W)', note: '2-20 mcg/kg/min' },
+            'Furosemide': { conc: 10, dose: 1, route: 'IV/IM', prep: '20mg/2ml', note: '1-2 mg/kg/dose ทุก 6-12 ชม. (Max 6 mg/kg/dose). เพิ่มได้ครั้งละ 1 mg/kg ทุก 2 ชม. หากปัสสาวะไม่ออก' },
+            'Glucose 50%': { conc: 500, dose: 500, route: 'IV/IO (Slow)', prep: '50% glucose dilute เป็น 12.5% (newborn) หรือ 25% (child)', note: '0.5-1 g/kg: Newborn use D10 5-10 mL/kg, Child use D25 2-4 mL/kg' },
+            'Haldol (Haridol)': { conc: 5, dose: 0.05, route: 'IM/IV', prep: '5mg/1ml', note: 'ไม่แนะนำในเด็ก < 3 ปี; อายุ 6-12 ปี: IM 1-3 mg ทุก 4-8 ชม. PRN (ไม่เกิน 0.15 mg/kg/วัน)' },
+            'Hydrocortisone': { conc: 50, dose: 1.67, max: 250, route: 'IV/IM', prep: '100mg ละลายใน SWI ไม่เกิน 2 ml', note: '5 mg/kg/วัน (แบ่งให้ q 8 ชม. ~1.67 mg/kg/dose); Max 250 mg/dose' },
+            'Magnesium sulfate 50%': { conc: 500, dose: 25, max: 2000, route: 'IV/IO', prep: '2ml=1g (เจือจางให้ < 20%)', note: '25-50 mg/kg (max 2 gm) in 10-20 min (Torsade, severe asthma)' },
+            'Naloxone': { conc: 0.4, dose: 0.1, max: 2, route: 'IV/IO/IM/ET', prep: '0.4mg/1ml', note: '0.1 mg/kg (max 2mg) q 2 min PRN (< 5 yr หรือ < 20 kg)' },
+            'Sodium bicarbonate 7.5%': { conc: 0.89, dose: 1, route: 'IV/IO', prep: '50ml (เจือจาง sterile water 1:1 ใน infant)', note: '1 mEq/kg IV slow bolus' },
+            'Xylocaine (Lidocaine) 2%': { conc: 20, dose: 1, route: 'IV/IO', prep: '20mg/1ml (Preservative free)', note: 'Bolus: 1 mg/kg; Infusion: 20-50 mcg/kg/min' },
+            'Nitroglycerine': { conc: 0.5, dose: 0.001, route: 'IV Drip', prep: '5mg/10ml', note: '1-5 mcg/kg/min titrate q 15-20 min' },
+            'Norepinephrine': { conc: 1, dose: 0.0001, route: 'IV Drip', prep: '4mg/4ml (ผสมใน D5W)', note: '0.1-2 mcg/kg/min' },
+            'PGE1': { conc: 0.5, dose: 0.00005, route: 'IV Drip', prep: '500mcg/1ml', note: '0.05-0.1 mcg/kg/min' },
+            'Procainamide': { conc: 100, dose: 15, route: 'IV/IO', prep: '1g/10ml', note: '15 mg/kg in 30-60 min (20 mg/min) (max total 17 mg/kg)' },
+            'Salbutamol': { conc: 5, dose: 0, route: 'NB', prep: 'Ventolin NB', note: '< 20kg: 2.5mg; > 20kg: 5mg' },
+            'Crystalloid (RLS/NS)': { conc: 0, dose: 20, route: 'IV/IO', prep: 'Fluid Bolus', note: '20 mL/kg in 5-10 min (shock) หรือ 5-10 mL/kg in 10-20 min (cardiogenic shock); ใช้ ideal body weight' }
+        };
+
+        const extraMeds = {
+            'Lorazepam': { conc: 2, dose: 0.1, route: 'IV Slow', prep: '2mg/1ml', note: 'Anticonvulsant' },
+            'Midazolam': { conc: 5, dose: 0.1, route: 'IV/IM/IN', prep: '5mg/1ml', note: 'Sedative/Anticonvulsant' }
+        };
+
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const btn = document.getElementById('themeBtn');
             if (document.body.classList.contains('light-mode')) {
-                btn.innerText = "🌙 Dark";
+                btn.innerHTML = "🌙 Dark";
             } else {
-                btn.innerText = "☀️ Light";
+                btn.innerHTML = "☀️ Light";
             }
+        }
+
+        function goBack() {
+            document.getElementById('header').classList.remove('active');
+            document.getElementById('dash').classList.remove('active');
+            document.getElementById('backBtn').classList.remove('active');
+            document.getElementById('weightEstimator').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetAll() {
+            document.getElementById('age').value = "";
+            document.getElementById('weight').value = "";
+            document.getElementById('ageInput').value = "";
+            document.getElementById('weightResult').innerText = "--";
+            if (isMetroPlaying) toggleMetronome();
+            closeModal();
+            goBack();
         }
 
         function calculateWeight() {
             const age = parseFloat(document.getElementById('ageInput').value);
             const unit = document.getElementById('unitSelect').value;
-            let weight = 0;
+            let weight = getEstimatedIBW(age, unit);
+            if (isNaN(weight)) { document.getElementById('weightResult').innerText = "--"; return; }
+            document.getElementById('weightResult').innerText = weight.toFixed(1);
+        }
 
-            if (!age || age <= 0) {
-                document.getElementById('weightResult').innerText = "--";
-                return;
-            }
-
+        function getEstimatedIBW(age, unit) {
+            if (!age || age <= 0) return NaN;
             if (unit === 'months') {
-                weight = (age + 9) / 2;
+                return (age + 9) / 2;
             } else {
-                if (age < 7) {
-                    weight = (age * 2) + 8;
+                if (age <= 5) {
+                    return (age * 2) + 8;
                 } else {
-                    weight = ((age * 7) - 5) / 2;
+                    return (age * 3) + 7;
                 }
             }
-            document.getElementById('weightResult').innerText = weight.toFixed(1);
         }
 
         function useEstimatedWeight() {
             const estWtStr = document.getElementById('weightResult').innerText;
             const ageVal = document.getElementById('ageInput').value;
             const unit = document.getElementById('unitSelect').value;
-
             if (estWtStr !== "--") {
                 document.getElementById('weight').value = estWtStr;
-                if (unit === 'years') {
-                    document.getElementById('age').value = ageVal;
-                } else {
-                    document.getElementById('age').value = (ageVal / 12).toFixed(1);
-                }
+                if (unit === 'years') { document.getElementById('age').value = ageVal; }
+                else { document.getElementById('age').value = (ageVal / 12).toFixed(1); }
             }
         }
 
@@ -874,49 +1190,140 @@
             const wt = parseFloat(document.getElementById('weight').value);
             if (!wt || wt <= 0) return alert("กรุณาระบุน้ำหนักที่ถูกต้อง");
 
+            // Calculate Ideal Body Weight for Fluids
+            let ibw = getEstimatedIBW(age, 'years');
+            if (isNaN(ibw)) ibw = wt; // Fallback
+
             document.getElementById('header').classList.add('active');
             document.getElementById('dash').classList.add('active');
+            document.getElementById('backBtn').classList.add('active');
             document.getElementById('weightEstimator').style.display = 'none';
             document.getElementById('display_wt').innerText = wt + " kg";
 
-            // Airway
+            // 1. Airway / Equipment
             let ett = (age < 1) ? 3.0 : (age / 4 + 3.5);
             document.getElementById('ett_s').innerText = ett.toFixed(1);
             document.getElementById('ett_l').innerText = (age < 1) ? "11" : (age / 2 + 12).toFixed(1);
             document.getElementById('ct').innerText = (age <= 2) ? "16-20" : (age <= 5) ? "20-24" : "24-32";
 
-            // Emergency Meds
-            document.getElementById('m_epi').innerText = (wt * 0.1).toFixed(2);
-            document.getElementById('m_amio').innerText = Math.min(wt * 5, 300).toFixed(0);
-            document.getElementById('m_lido').innerText = (wt * 1).toFixed(1);
-            let atro = wt * 0.02;
-            document.getElementById('m_atro').innerText = (atro < 0.1 ? 0.1 : Math.min(atro, 0.5)).toFixed(2);
+            // 2. Dash Calculation Helpers
+            const setVal = (idPrefix, drugKey, customDB = medDB) => {
+                const drug = customDB[drugKey];
+                let mg = wt * drug.dose;
+                if (drug.max && mg > drug.max) mg = drug.max;
+                const ml = (drug.conc > 0) ? mg / drug.conc : 0;
+                document.getElementById(`${idPrefix}_mg`).innerText = mg.toFixed(2);
+                document.getElementById(`${idPrefix}_ml`).innerText = ml.toFixed(2) + " mL";
+            };
 
-            // Metabolic (Glucose แยกมาให้ชัดเจนที่นี่)
-            document.getElementById('m_d10').innerText = (wt * 5) + " - " + (wt * 10);
-            document.getElementById('m_ca').innerText = (wt * 0.5).toFixed(1) + " - " + (wt * 1.0).toFixed(1);
-            document.getElementById('m_mg').innerText = (wt * 0.05).toFixed(2) + " - " + (wt * 0.1).toFixed(2);
+            // Cardiac Arrest
+            setVal('m_epi', 'Adrenaline (Epinephrine)');
+            setVal('m_amio', 'Amiodarone');
+            setVal('m_lido', 'Xylocaine (Lidocaine) 2%');
+            setVal('m_atro', 'Atropine');
 
-            // Neuro
-            document.getElementById('m_dia').innerText = Math.min(wt * 0.2, 10).toFixed(1) + " mg";
-            document.getElementById('m_lor').innerText = Math.min(wt * 0.1, 4).toFixed(1) + " mg";
-            document.getElementById('m_nal').innerText = Math.min(wt * 0.1, 2).toFixed(1) + " mg";
-            document.getElementById('m_mid').innerText = Math.min(wt * 0.1, 5).toFixed(1) + " mg";
+            // Neuro / Tox
+            setVal('m_dia', 'Diazepam');
+            setVal('m_lor', 'Lorazepam', extraMeds);
+            setVal('m_nal', 'Naloxone');
+            setVal('m_mid', 'Midazolam', extraMeds);
 
-            // Fluids & Cardio
-            document.getElementById('m_ns').innerText = (wt * 20);
-            document.getElementById('m_ade').innerText = Math.min(wt * 0.1, 6).toFixed(1);
-            document.getElementById('df1').innerText = wt * 2;
-            document.getElementById('df2').innerText = wt * 4;
+            // Metabolic
+            setVal('m_glu', 'Glucose 50%');
+            setVal('m_ca', 'Calcium gluconate 10%');
+            setVal('m_mg', 'Magnesium sulfate 50%');
+
+            // Fluids & Cardio (Use IBW for NS)
+            document.getElementById('m_ns').innerText = (ibw * 20).toFixed(0);
+            setVal('m_ade1', 'Adenosine (1st)');
+            setVal('m_ade2', 'Adenosine (2nd)');
+            document.getElementById('df1').innerText = (wt * 2).toFixed(0);
+            document.getElementById('df2').innerText = (wt * 4).toFixed(0);
+            document.getElementById('df3').innerText = (wt * 4).toFixed(0) + " - " + (wt * 10).toFixed(0);
+
+            // 4. Update Vital Signs
+            let vs = { rr: "-", hra: "-", hrs: "-", bp: "-" };
+            if (age < 1 / 12) {
+                vs = { rr: "40 - 60", hra: "100 - 205", hrs: "90 - 160", bp: "< 60" };
+            } else if (age < 1) {
+                vs = { rr: "30 - 50", hra: "100 - 180", hrs: "90 - 160", bp: "< 70" };
+            } else if (age <= 3) {
+                vs = { rr: "20 - 40", hra: "98 - 140", hrs: "80 - 120", bp: "< " + (70 + (age * 2)).toFixed(0) };
+            } else if (age <= 5) {
+                vs = { rr: "20 - 30", hra: "80 - 120", hrs: "65 - 100", bp: "< " + (70 + (age * 2)).toFixed(0) };
+            } else if (age <= 9) {
+                vs = { rr: "15 - 25", hra: "75 - 118", hrs: "58 - 90", bp: "< " + (70 + (age * 2)).toFixed(0) };
+            } else if (age <= 12) {
+                vs = { rr: "15 - 22", hra: "75 - 118", hrs: "56 - 90", bp: "< 90" };
+            } else {
+                vs = { rr: "12 - 20", hra: "60 - 100", hrs: "50 - 90", bp: "< 90" };
+            }
+
+            document.getElementById('vs_rr').innerText = vs.rr;
+            document.getElementById('vs_hr_awake').innerText = vs.hra + " (ขณะตื่น)";
+            document.getElementById('vs_hr_sleep').innerText = vs.hrs + " (ขณะหลับ)";
+            document.getElementById('vs_bp').innerText = vs.bp;
+
+            // Generate Drug Admin Grid
+            renderMedGrid();
         }
 
+        function renderMedGrid() {
+            const grid = document.getElementById('medGrid');
+            grid.innerHTML = "";
+            Object.keys(medDB).forEach((name, index) => {
+                const btn = document.createElement('button');
+                btn.className = "med-btn-sm";
+                btn.innerText = `${index + 1}. ${name}`;
+                btn.onclick = () => calculateMed(name);
+                grid.appendChild(btn);
+            });
+        }
+
+        function calculateMed(key) {
+            const wt = parseFloat(document.getElementById('weight').value);
+            const drug = medDB[key];
+            let mg = wt * drug.dose;
+
+            // Max Dose Capping
+            if (drug.max && mg > drug.max) mg = drug.max;
+
+            // Special Case: Salbutamol
+            if (key === 'Salbutamol') {
+                mg = wt < 20 ? 2.5 : 5;
+            }
+
+            const ml = (drug.conc > 0) ? mg / drug.conc : 0;
+
+            document.getElementById('displayMedName').innerText = key;
+            document.getElementById('displayRoute').innerText = drug.route;
+
+            const calcBox = document.getElementById('displayCalc');
+            if (key === 'Salbutamol') {
+                calcBox.innerHTML = `<b style="color:var(--pastel-pink);">${mg} mg</b> (Weight ${wt} kg)`;
+            } else if (key.includes('Crystalloid')) {
+                // For fluids, the "mg" calculation (wt * dose) is actually the volume in mL
+                calcBox.innerHTML = `<b style="color:var(--pastel-blue);">${mg.toFixed(0)} mL</b> (Dose 20 mL/kg)`;
+            } else {
+                calcBox.innerHTML = `${mg.toFixed(2)} mg หรือ <b style="color:var(--pastel-blue);">${ml.toFixed(2)} mL</b>`;
+            }
+
+            document.getElementById('displayPrep').innerText = drug.prep;
+            document.getElementById('displayNote').innerText = drug.note || "-";
+            document.getElementById('medModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('medModal').classList.remove('active');
+        }
+
+        // Metronome logic
         let audioCtx = null;
         let isMetroPlaying = false;
         let metroIntervalId = null;
 
         function toggleMetronome() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
             const btn = document.getElementById('metroBtn');
             const status = document.getElementById('statusLabel');
 
@@ -926,9 +1333,8 @@
                 btn.classList.remove('active');
                 status.innerText = "จังหวะปิดอยู่";
             } else {
-                // คำนวณความเร็ว 110 ครั้งต่อนาที
                 const ms = 60000 / 110;
-                playClick(); // เล่นครั้งแรกทันทีไม่ต้องรอ
+                playClick();
                 metroIntervalId = setInterval(playClick, ms);
                 btn.innerText = "หยุดจังหวะ";
                 btn.classList.add('active');
@@ -940,31 +1346,14 @@
         function playClick() {
             const osc = audioCtx.createOscillator();
             const envelope = audioCtx.createGain();
-
-            osc.type = 'sine'; // เสียงนุ่มๆ ไม่แสบหู
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime); // โน้ต A5
-
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
             envelope.gain.setValueAtTime(1, audioCtx.currentTime);
             envelope.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-
             osc.connect(envelope);
             envelope.connect(audioCtx.destination);
-
             osc.start();
             osc.stop(audioCtx.currentTime + 0.1);
-        }
-
-        function showMed(name, dose, route, prep, note) {
-            document.getElementById('medName').innerText = name;
-            document.getElementById('medDose').innerText = dose;
-            document.getElementById('medRoute').innerText = route;
-            document.getElementById('medPrep').innerText = prep;
-            document.getElementById('medNote').innerText = note;
-            document.getElementById('medDetail').style.display = 'block';
-        }
-
-        function closeMed() {
-            document.getElementById('medDetail').style.display = 'none';
         }
     </script>
     <footer style="margin-top: 50px; padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
