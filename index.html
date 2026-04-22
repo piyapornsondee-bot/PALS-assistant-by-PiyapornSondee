@@ -1008,11 +1008,12 @@
             <div class="card ord-6" style="width: 90%; margin-top: 20px; border-bottom: 4px solid var(--pastel-green);">
                 <h3>🍬 Metabolic / Glucose</h3>
                 <div class="row">
-                    <span class="lbl">Glucose 50% (0.5 g/kg)</span>
-                    <div class="val-group">
-                        <span><span class="val green" id="m_glu_mg">-</span><span class="unit">mg</span></span>
-                        <span class="val-sub" id="m_glu_ml">- mL</span>
-                    </div>
+                    <span class="lbl">D10W (5-10 mL/kg)</span>
+                    <span><span class="val green" id="m_d10w">-</span><span class="unit">mL</span></span>
+                </div>
+                <div class="row">
+                    <span class="lbl">D25W (2-4 mL/kg)</span>
+                    <span><span class="val green" id="m_d25w">-</span><span class="unit">mL</span></span>
                 </div>
                 <div class="row">
                     <span class="lbl">Ca Gluconate (60 mg/kg)</span>
@@ -1028,6 +1029,8 @@
                         <span class="val-sub" id="m_mg_ml">- mL</span>
                     </div>
                 </div>
+                <p style="font-size: 0.65rem; color: #94a3b8; margin: 10px 0 0 0; line-height: 1.3;">
+                    *Hypoglycemia: DTX < 60 mg/dL </p>
             </div>
             <button class="back-calc-btn ord-9" id="backBtn" onclick="goBack()">🔄 กลับไปหน้าคำนวณ (Back)</button>
 
@@ -1090,12 +1093,25 @@
                 <div class="row"><span class="lbl">NS/RLS (20 mL/kg)</span><span><span class="val blue"
                             id="m_ns">-</span><span class="unit">mL</span></span></div>
                 <p style="font-size: 0.7rem; color: #94a3b8; margin: -5px 0 10px 0;">*Cardiogenic shock: 5-10 mL/kg</p>
-                <div class="row"><span class="lbl">Defib (2 J/kg)</span><span><span class="val blue"
+                <div class="row"><span class="lbl">Defib 1st (2 J/kg)</span><span><span class="val blue"
                             id="df1">-</span><span class="unit">J</span></span></div>
-                <div class="row"><span class="lbl">Defib (4 J/kg)</span><span><span class="val blue"
+                <div class="row"><span class="lbl">Defib 2nd (4 J/kg)</span><span><span class="val blue"
                             id="df2">-</span><span class="unit">J</span></span></div>
-                <div class="row"><span class="lbl">Defib (3rd+) 4-10 J/kg</span><span><span class="val blue"
+                <div class="row"><span class="lbl">Defib 3rd+ (4-10 J/kg)</span><span><span class="val blue"
                             id="df3">-</span><span class="unit">J</span></span></div>
+                <div class="row"
+                    style="margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                    <span class="lbl">Sync Cardio 1st (0.5-1 J/kg)</span>
+                    <span><span class="val pink" id="sc1">-</span><span class="unit">J</span></span>
+                </div>
+                <div class="row">
+                    <span class="lbl">Sync Cardio 2nd (2 J/kg)</span>
+                    <span><span class="val pink" id="sc2">-</span><span class="unit">J</span></span>
+                </div>
+                <p style="font-size: 0.65rem; color: #94a3b8; margin: 10px 0 0 0; line-height: 1.3;">
+                    *Defib: สำหรับ VF / pVT (ไม่มีชีพจร)<br>
+                    *Sync Cardio: สำหรับ SVT / VT ที่มีชีพจรแต่ Unstable
+                </p>
             </div>
 
             <!-- Medication Detail Card -->
@@ -1269,7 +1285,8 @@
             setVal('m_mid', 'Midazolam');
 
             // Metabolic
-            setVal('m_glu', 'Glucose 50%');
+            document.getElementById('m_d10w').innerText = (wt * 5).toFixed(0) + " - " + (wt * 10).toFixed(0);
+            document.getElementById('m_d25w').innerText = (wt * 2).toFixed(0) + " - " + (wt * 4).toFixed(0);
             setVal('m_ca', 'Calcium gluconate 10%');
             setVal('m_mg', 'Magnesium sulfate 50%');
 
@@ -1280,6 +1297,10 @@
             document.getElementById('df1').innerText = (wt * 2).toFixed(0);
             document.getElementById('df2').innerText = (wt * 4).toFixed(0);
             document.getElementById('df3').innerText = (wt * 4).toFixed(0) + " - " + (wt * 10).toFixed(0);
+
+            // Synchronized Cardioversion
+            document.getElementById('sc1').innerText = (wt * 0.5).toFixed(0) + " - " + (wt * 1).toFixed(0);
+            document.getElementById('sc2').innerText = (wt * 2).toFixed(0);
 
             // 4. Update Vital Signs
             let vs = { rr: "-", hra: "-", hrs: "-", bp: "-" };
