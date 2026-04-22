@@ -1056,7 +1056,7 @@
             <div class="card ord-4" style="border-left: 4px solid var(--pastel-purple);">
                 <h3>🧠 Neuro / Tox</h3>
                 <div class="row">
-                    <span class="lbl">Diazepam (0.2 mg/kg)</span>
+                    <span class="lbl">Diazepam (0.3 mg/kg, Max 10mg)</span>
                     <div class="val-group">
                         <span><span class="val purple" id="m_dia_mg">-</span><span class="unit">mg</span></span>
                         <span class="val-sub" id="m_dia_ml">- mL</span>
@@ -1077,7 +1077,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <span class="lbl">Midazolam (0.1 mg/kg)</span>
+                    <span class="lbl">Midazolam (0.2 mg/kg)</span>
                     <div class="val-group">
                         <span><span class="val" id="m_mid_mg">-</span><span class="unit">mg</span></span>
                         <span class="val-sub" id="m_mid_ml">- mL</span>
@@ -1143,7 +1143,9 @@
             'Calcium gluconate 10%': { conc: 100, dose: 60, max: 1000, route: 'IV/IO (Slow Push)', prep: '10ml = 1,000mg', note: '0.6 mL/kg IV slow push (Max 10 mL หรือ 1,000 mg)' },
             'Chlorpheniramine (CPM)': { conc: 10, dose: 0.25, max: 5, route: 'IV/IM/SC', prep: '10mg/1ml', note: '0.25 mg/kg ทุก 6 ชม. (Max 5 mg/dose)' },
             'Dexamethasone': { conc: 5, dose: 0.6, route: 'IV/IM/PO', prep: '5mg/1ml', note: '0.6 mg/kg (asthma, croup)' },
-            'Diazepam': { conc: 5, dose: 0.2, max: 10, route: 'IV Slow Push', prep: '10mg/2ml (ห้ามผสมน้ำยาอื่น)', note: '0.2-0.3 mg/kg (0.04-0.06 ml/kg); สูงสุด 10 mg (2 ml)' },
+            'Diazepam': { conc: 5, dose: 0.3, max: 10, route: 'IV Slow Push / Rectal', prep: '10mg/2ml (ห้ามเจือจาง)', note: 'เด็ก: 0.3 mg/kg IV หรือ 0.5 mg/kg rectal (Rate < 2 mg/min); ให้ซ้ำได้ใน 5-10 นาทีถ้าไม่หยุดชัก (Max 10mg). ระวังการกดหายใจและความดันต่ำ' },
+            'Lorazepam': { conc: 2, dose: 0.1, max: 4, route: 'IV Slow', prep: '2mg/1ml', note: 'Anticonvulsant' },
+            'Midazolam': { conc: 5, dose: 0.2, max: 10, route: 'IM / IN / Buccal', prep: '5mg/1ml (ไม่ต้องเจือจาง)', note: 'เด็ก: IM (<13kg=0.2mg/kg, 13-40kg=5mg, >40kg=10mg) หรือ 0.2 mg/kg IN หรือ 0.5 mg/kg buccal. ให้ซ้ำได้ใน 5-10 นาที. ระวังการกดหายใจและความดันต่ำ' },
             'Dimenhydrinate': { conc: 50, dose: 1.25, route: 'IV/IM', prep: '50mg/1ml', note: '1.25 mg/kg (Antiemetic)' },
             'Dopamine': { conc: 40, dose: 5, route: 'IV Drip', prep: '250mg/5ml (ผสมใน NSS/D5W)', note: '2-20 mcg/kg/min' },
             'Dobutamine': { conc: 12.5, dose: 5, route: 'IV Drip', prep: '250mg/20ml (ผสมใน NSS/D5W)', note: '2-20 mcg/kg/min' },
@@ -1161,11 +1163,6 @@
             'Procainamide': { conc: 100, dose: 15, route: 'IV/IO', prep: '1g/10ml', note: '15 mg/kg in 30-60 min (20 mg/min) (max total 17 mg/kg)' },
             'Salbutamol': { conc: 5, dose: 0, route: 'NB', prep: 'Ventolin NB', note: '< 20kg: 2.5mg; > 20kg: 5mg' },
             'Crystalloid (RLS/NS)': { conc: 0, dose: 20, route: 'IV/IO', prep: 'Fluid Bolus', note: '20 mL/kg in 5-10 min (shock) หรือ 5-10 mL/kg in 10-20 min (cardiogenic shock); ใช้ ideal body weight' }
-        };
-
-        const extraMeds = {
-            'Lorazepam': { conc: 2, dose: 0.1, route: 'IV Slow', prep: '2mg/1ml', note: 'Anticonvulsant' },
-            'Midazolam': { conc: 5, dose: 0.1, route: 'IV/IM/IN', prep: '5mg/1ml', note: 'Sedative/Anticonvulsant' }
         };
 
         function toggleTheme() {
@@ -1267,9 +1264,9 @@
 
             // Neuro / Tox
             setVal('m_dia', 'Diazepam');
-            setVal('m_lor', 'Lorazepam', extraMeds);
+            setVal('m_lor', 'Lorazepam');
             setVal('m_nal', 'Naloxone');
-            setVal('m_mid', 'Midazolam', extraMeds);
+            setVal('m_mid', 'Midazolam');
 
             // Metabolic
             setVal('m_glu', 'Glucose 50%');
@@ -1344,6 +1341,29 @@
             const calcBox = document.getElementById('displayCalc');
             if (key === 'Salbutamol') {
                 calcBox.innerHTML = `<b style="color:var(--pastel-pink);">${mg} mg</b> (Weight ${wt} kg)`;
+            } else if (key === 'Midazolam') {
+                let imDose = (wt < 13) ? (wt * 0.2).toFixed(2) + " mg" : (wt >= 13 && wt <= 40) ? "5 mg" : "10 mg";
+                let inDose = (wt * 0.2).toFixed(2);
+                let buccalDose = (wt * 0.5).toFixed(2);
+                calcBox.innerHTML = `
+                    <div style="font-size: 1.1rem; margin-bottom:10px;">⚡ IN Dose (0.2 mg/kg): <b style="color:var(--pastel-blue);">${inDose} mg</b></div>
+                    <div style="font-size: 0.9rem; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                        <div>📍 IM Dose (<13kg: 0.2mg/kg, 13-40: 5mg, >40: 10mg): <b style="color:var(--pastel-pink);">${imDose}</b></div>
+                        <div style="margin-top:5px;">📍 Buccal Dose (0.5 mg/kg): <b style="color:var(--pastel-yellow);">${buccalDose} mg</b></div>
+                        <div style="margin-top:5px; font-size: 0.8rem; opacity: 0.7;">*IV Dose (0.2 mg/kg): ${mg.toFixed(2)} mg</div>
+                    </div>
+                `;
+            } else if (key === 'Diazepam') {
+                let rDose = wt * 0.5;
+                if (rDose > 10) rDose = 10;
+                let rectalDose = rDose.toFixed(2);
+                let rectalMl = (rDose / 5).toFixed(2);
+                calcBox.innerHTML = `
+                    <div style="font-size: 1.1rem; margin-bottom:10px;">💉 IV Dose (0.3 mg/kg): <b style="color:var(--pastel-blue);">${mg.toFixed(2)} mg (${ml.toFixed(2)} mL)</b></div>
+                    <div style="font-size: 0.9rem; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                        <div>📍 Rectal Dose (0.5 mg/kg, Max 10mg): <b style="color:var(--pastel-pink);">${rectalDose} mg (${rectalMl} mL)</b></div>
+                    </div>
+                `;
             } else if (key.includes('Crystalloid')) {
                 // For fluids, the "mg" calculation (wt * dose) is actually the volume in mL
                 calcBox.innerHTML = `<b style="color:var(--pastel-blue);">${mg.toFixed(0)} mL</b> (Dose 20 mL/kg)`;
