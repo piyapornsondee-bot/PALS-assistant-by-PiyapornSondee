@@ -577,6 +577,13 @@
             --pastel-purple: #7e22ce;
         }
 
+        body.light-mode h1 {
+            background: linear-gradient(to right, var(--pastel-blue), #1e293b, var(--pastel-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(2, 132, 199, 0.15));
+        }
+
         body.light-mode .theme-toggle {
             background: rgba(0, 0, 0, 0.05);
             color: #0f172a;
