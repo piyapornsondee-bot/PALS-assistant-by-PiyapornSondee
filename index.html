@@ -96,17 +96,19 @@
 
         /* Dashboard Grid */
         .dashboard {
-            display: grid;
+            display: none;
+            /* ซ่อนไว้ก่อนเพื่อไม่ให้เกิดที่ว่างด้านล่าง */
             grid-template-columns: 1fr 1.2fr 1fr;
             gap: 20px;
             width: 95%;
             max-width: 1300px;
             opacity: 0;
             pointer-events: none;
-            transition: 1s;
+            transition: opacity 0.8s ease;
         }
 
         .dashboard.active {
+            display: grid;
             opacity: 1;
             pointer-events: auto;
         }
@@ -230,7 +232,7 @@
 
         /* โค้ดสำหรับปรับแต่งหน้าจอขนาดเล็ก (Mobile Responsive) */
         @media (max-width: 768px) {
-            .dashboard {
+            .dashboard.active {
                 display: flex;
                 flex-direction: column;
                 gap: 15px;
@@ -1148,7 +1150,7 @@
         // 1. Database ยา
         const medDB = {
             'Adrenaline (Epinephrine)': {
-                conc: 1, dose: 0.01, max: 1, route: 'IV/IO/IM/ET/Neb',
+                conc: 0.1, dose: 0.01, max: 1, route: 'IV/IO/IM/ET/Neb',
                 prep: 'CPR: 1:10,000 (0.1 ml/kg), IM: 1:1,000 (0.01 ml/kg), Croup: 1:1,000 (0.5 ml/kg Neb)',
                 note: 'Cardiac Arrest: 0.01 mg/kg (Max 1mg); ETT: 0.1 mg/kg. Hypotension: 0.1-1 mcg/kg/min. Anaphylaxis: 0.01 mg/kg (0.01 ml/kg) IM (Max 0.3ml) q 5-15 min. Croup: 0.5 ml/kg Neb (+NSS 2ml); Max 2.5ml (<4yr), 5ml (>4yr)'
             },
@@ -1193,7 +1195,9 @@
 
         function goBack() {
             document.getElementById('header').classList.remove('active');
-            document.getElementById('dash').classList.remove('active');
+            const dash = document.getElementById('dash');
+            dash.classList.remove('active');
+            setTimeout(() => { dash.style.display = 'none'; }, 800); // ซ่อนหลังจาก Fade out เสร็จ
             document.getElementById('backBtn').classList.remove('active');
             document.getElementById('weightEstimator').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1220,12 +1224,15 @@
         function getEstimatedIBW(age, unit) {
             if (!age || age <= 0) return NaN;
             if (unit === 'months') {
-                return (age + 9) / 2;
+                // < 12 เดือน: kg = (อายุเป็นเดือน/2) + 4
+                return (age / 2) + 4;
             } else {
-                if (age <= 5) {
+                if (age <= 10) {
+                    // 1-10 ปี: kg = (อายุเป็นปี x 2) + 8
                     return (age * 2) + 8;
                 } else {
-                    return (age * 3) + 7;
+                    // > 10 ปี: kg = อายุเป็นปี x 3
+                    return age * 3;
                 }
             }
         }
@@ -1250,10 +1257,17 @@
             let ibw = getEstimatedIBW(age, 'years');
             if (isNaN(ibw)) ibw = wt; // Fallback
 
-            document.getElementById('header').classList.add('active');
-            document.getElementById('dash').classList.add('active');
-            document.getElementById('backBtn').classList.add('active');
-            document.getElementById('weightEstimator').style.display = 'none';
+            const dash = document.getElementById('dash');
+            dash.style.display = (window.innerWidth <= 768) ? 'flex' : 'grid';
+
+            // รอเล็กน้อยเพื่อให้การแสดงผลเริ่มทำงานก่อนใส่ Class สำหรับ Transition
+            setTimeout(() => {
+                document.getElementById('header').classList.add('active');
+                dash.classList.add('active');
+                document.getElementById('backBtn').classList.add('active');
+                document.getElementById('weightEstimator').style.display = 'none';
+            }, 10);
+
             document.getElementById('display_wt').innerText = wt + " kg";
 
             // 1. Airway / Equipment
@@ -1362,6 +1376,16 @@
             const calcBox = document.getElementById('displayCalc');
             if (key === 'Salbutamol') {
                 calcBox.innerHTML = `<b style="color:var(--pastel-pink);">${mg} mg</b> (Weight ${wt} kg)`;
+            } else if (key.includes('Adrenaline')) {
+                const ml10k = (mg / 0.1).toFixed(2);
+                const ml1k = (mg / 1).toFixed(2);
+                calcBox.innerHTML = `
+                    <div style="font-size: 1.1rem; margin-bottom:10px;">🚨 Cardiac Arrest (1:10,000): <b style="color:var(--pastel-pink);">${ml10k} mL</b></div>
+                    <div style="font-size: 0.9rem; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                        <div>📍 Anaphylaxis (1:1,000) IM: <b style="color:var(--pastel-blue);">${ml1k} mL</b></div>
+                        <div style="margin-top:5px; font-size: 0.8rem; opacity: 0.7;">*Calculated dose: ${mg.toFixed(2)} mg (0.01 mg/kg)</div>
+                    </div>
+                `;
             } else if (key === 'Midazolam') {
                 let imDose = (wt < 13) ? (wt * 0.2).toFixed(2) + " mg" : (wt >= 13 && wt <= 40) ? "5 mg" : "10 mg";
                 let inDose = (wt * 0.2).toFixed(2);
@@ -1439,6 +1463,11 @@
             osc.start();
             osc.stop(audioCtx.currentTime + 0.1);
         }
+
+        // บังคับให้เลื่อนขึ้นบนสุดเมื่อโหลดหน้า
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0);
+        });
     </script>
     <footer style="margin-top: 50px; padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
         <p style="font-size: 0.75rem; color: #64748b; line-height: 1.6; max-width: 600px; margin: 0 auto;">
